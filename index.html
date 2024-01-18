@@ -44,8 +44,113 @@
             <h1>Thank You</h1>
         </section>
     </div>
-    <script src="../undangan/js/darkmode.js"></script>
-    <script src="../undangan/js/countdown.js"></script>
-    <script src="../undangan/js/animation.js"></script>
+    <script>
+        const pages = document.querySelectorAll('.page');
+
+        window.addEventListener('scroll', checkPage);
+
+        function checkPage(){
+            const triggerBottom = window.innerHeight / 5 * 4;
+
+            pages.forEach(page => {
+                const pageTop = page.getBoundingClientRect().top;
+
+                if(pageTop < triggerBottom) {
+                    page.classList.add('show');
+                } else {
+                    page.classList.remove('show');
+                }
+            });
+        }
+
+        checkPage();
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var countDownDate = new Date("Feb 2, 2024 12:00:00").getTime();
+
+            var x = setInterval(function () {
+                var now = new Date().getTime();
+
+                var distance = countDownDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("countdown").innerHTML =
+                    days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("countdown").innerHTML = "HAPPY BIRTHDAYYY!!!";
+                }
+            }, 1000);
+        });
+
+        const button = document.querySelector("button");
+        const msg = document.querySelector("h1");
+        let clicked = false;
+
+        let modecookie = getCookie("mode");
+
+        if (modecookie){
+            setMode(modecookie);
+        }
+
+        button.addEventListener("click", () =>{
+            if (clicked != true){
+                setMode("dark");
+                clicked = true;
+            }else{
+                setMode("light");
+                clicked = false;
+            };
+        })
+
+        function setMode(value){
+            if (value == "dark"){
+                document.body.style.backgroundColor = "black";
+                document.body.style.color = "white";
+                button.style.backgroundColor = "white";
+                button.innerHTML = "☀️";
+                button.id = "light";
+            } else if (value == "light"){
+                document.body.style.backgroundColor = "white";
+                document.body.style.color = "black";
+                button.style.backgroundColor = "black";
+                button.innerHTML = "🌙";
+                button.id = "dark";
+            }
+
+            setCookie("mode", value, 1);
+        }
+
+        function getCookie(name){
+            const cookieDecoded = decodeURIComponent(document.cookie);
+            const cookieArr = cookieDecoded.split("; ");
+            let result = null;
+
+            cookieArr.forEach(element =>{
+                if (element.indexOf(name) === 0){
+                    result = element.substring(name.length + 1);
+                }
+            })
+
+            return result;
+        }
+
+        function setCookie(name, value, days) {
+            const expirationDate = new Date();
+            expirationDate.setTime(expirationDate.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + expirationDate.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function deleteCookie(name){
+            setCookie(name,null,null);
+        }
+
+    </script>
 </body>
 </html>
